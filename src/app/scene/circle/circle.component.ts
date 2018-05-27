@@ -16,6 +16,10 @@ export class CircleComponent extends Entity implements OnInit {
   @Input()
   public fill = 'red';
 
+  @NodeBinding('draggable')
+  @Input()
+  public draggable = true;
+
   public init() {
     console.log(this.fill);
     this.node = new Konva.Circle({
@@ -26,7 +30,7 @@ export class CircleComponent extends Entity implements OnInit {
       stroke: 'black',
       strokeWidth: 4
     });
-    this.node.draggable(true);
+    this.node.draggable(this.draggable);
 
     super.init();
   }

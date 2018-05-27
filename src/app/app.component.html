@@ -3,10 +3,11 @@
     <button (click)="addStuff()">Add Stuff</button>
     Width <input type="number" [(ngModel)]="radius">
     height <input type="text" [(ngModel)]="fill">
+    Draggable <input type="checkbox" [(ngModel)]="draggable">
     <app-stage>
       <!-- <app-entity *ngFor="let x of stuff"></app-entity> -->
       <app-layer>
-        <app-circle *ngFor="let x of stuff" [radius]="radius" [fill]="fill"></app-circle>
+        <app-circle *ngFor="let x of stuff" [draggable]="draggable" [radius]="radius" [fill]="fill"></app-circle>
       </app-layer>
     </app-stage>
 </div>

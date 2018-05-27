@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   }
 
   radius = 20;
+  draggable = true;
 
   stuff = [1,2,3];
 
