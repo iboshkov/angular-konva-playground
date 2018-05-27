@@ -33,8 +33,8 @@ export class LayerComponent implements OnInit {
         ent.init();
         this.layer.add(ent.node);
       }
-      this.layer.drawScene();
     });
+    this.layer.draw();
   }
 
   public initChildren() {

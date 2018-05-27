@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  radius = 100;
+  radius = 20;
 
   stuff = [1,2,3];
 
