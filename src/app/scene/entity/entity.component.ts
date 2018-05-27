@@ -1,55 +1,24 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, forwardRef } from '@angular/core';
 import * as Konva from 'konva';
 import { nameof } from '../../../utils';
-
-const drawableKey = Symbol('drawable');
-function drawableProperty(obj: string, fn = 'text') {
-  function actualDecorator(target, name) {
-    Object.defineProperty(target, name, {
-      get: function() {
-        const drawable = this[obj];
-        const val = this['_' + name];
-        if (drawable) {
-          const fnToCall = drawable[fn] as Function;
-          if (fnToCall) {
-            fnToCall.apply(drawable, [val]);
-          }
-          drawable.getStage().draw();
-        }
-        return val;
-      },
-      set: function(value) { this['_' + name] = value; },
-      enumerable: true,
-      configurable: true
-    });
-  }
-
-  return actualDecorator;
-}
-
-function getFormat(target: any, propertyKey: string) {
-    return Reflect.getMetadata(drawableKey, target, propertyKey);
-}
-
+import { Entity } from './entity';
 
 @Component({
   selector: 'app-entity',
   templateUrl: './entity.component.html',
-  styleUrls: ['./entity.component.css']
+  styleUrls: ['./entity.component.css'],
+  providers: [{provide: Entity, useExisting: forwardRef(() => EntityComponent)}]
 })
-export class EntityComponent implements OnInit {
+export class EntityComponent extends Entity implements OnInit {
   textShape: Konva.Text;
   circle: Konva.Circle;
 
-  @drawableProperty(nameof<EntityComponent>('textShape'))
-  text = 'test';
-
-  @drawableProperty(nameof<EntityComponent>('circle'), 'radius')
-  width = 60;
-
   @Input() stage: Konva.Stage;
   @Input() layer: Konva.Layer;
-  constructor() { }
+
+  get node() { return this.circle; }
+
+  constructor() { super() }
 
   ngOnInit() {
   }
@@ -71,7 +40,7 @@ export class EntityComponent implements OnInit {
     this.textShape = new Konva.Text({
       x: this.circle.x() - this.circle.radius(),
       y: this.circle.y() - 15,
-      text: this.text,
+      text: '123',
       fontSize: 30,
       fontFamily: 'Calibri',
       width: this.circle.radius() * 2,

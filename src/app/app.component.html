@@ -1,6 +1,11 @@
 <div class="container">
     <h2>App</h2>
-    <app-scene>
-      <app-entity *ngFor="let x of stuff"></app-entity>
-    </app-scene>
+    Width <input type="number" [(ngModel)]="radius">
+    height <input type="text" [(ngModel)]="fill">
+    <app-stage>
+      <!-- <app-entity *ngFor="let x of stuff"></app-entity> -->
+      <app-layer>
+        <app-circle [radius]="radius" [fill]="fill"></app-circle>
+      </app-layer>
+    </app-stage>
 </div>

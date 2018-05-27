@@ -10,8 +10,9 @@ export class AppComponent implements OnInit {
 
   }
 
-  stuff = [1,2,3];
+  radius = 100;
 
+  fill = 'red';
   title = 'app';
 
   /**
