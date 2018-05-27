@@ -27,6 +27,8 @@ export class CircleComponent extends Entity implements OnInit {
       strokeWidth: 4
     });
     this.node.draggable(true);
+
+    super.init();
   }
 
   constructor() {

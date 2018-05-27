@@ -26,13 +26,13 @@ export class LayerComponent implements OnInit {
   }
 
   public syncChildren() {
-    this.layer.removeChildren();
-
     this.entities.forEach(ent => {
-      ent.stage = this.stage;
-      ent.layer = this.layer;
-      ent.init();
-      this.layer.add(ent.node);
+      if (!ent.initialized) {
+        ent.stage = this.stage;
+        ent.layer = this.layer;
+        ent.init();
+        this.layer.add(ent.node);
+      }
       this.layer.drawScene();
     });
   }

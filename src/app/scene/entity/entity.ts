@@ -54,6 +54,7 @@ export function KonvaBind(otherTarget) {
 
 @KonvaBind(Konva.Node.prototype)
 export class Entity {
+    public initialized = false;
     public node: Konva.Node;// = new Konva.Node({});// = new Konva.Node({});
     @Input() stage: Konva.Stage;
     @Input() layer: Konva.Layer;
@@ -61,5 +62,7 @@ export class Entity {
     constructor() {
     }
 
-    public init() {}
+    public init() {
+        this.initialized = true;
+    }
 }
