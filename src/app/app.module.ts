@@ -9,6 +9,7 @@ import { LayerComponent } from './scene/layer/layer.component';
 import { CircleComponent } from './scene/circle/circle.component';
 import { TextComponent } from './scene/text/text.component';
 import { GroupComponent } from './scene/group/group.component';
+import { RectComponent } from './scene/rect/rect.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { GroupComponent } from './scene/group/group.component';
     LayerComponent,
     CircleComponent,
     TextComponent,
-    GroupComponent
+    GroupComponent,
+    RectComponent
   ],
   imports: [
     BrowserModule,

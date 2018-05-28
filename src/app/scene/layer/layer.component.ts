@@ -1,23 +1,36 @@
-import { Component, OnInit, Input, ContentChildren, QueryList, AfterViewInit } from '@angular/core';
-import * as Konva from 'konva';
-import { Entity } from '../entity/entity';
+import {
+  Component,
+  OnInit,
+  Input,
+  ContentChildren,
+  QueryList,
+  AfterViewInit
+} from "@angular/core";
+import * as Konva from "konva";
+import { Entity, KonvaBind } from "../entity/entity";
 
 @Component({
-  selector: 'app-layer',
-  templateUrl: './layer.component.html',
-  styleUrls: ['./layer.component.css']
+  selector: "app-layer",
+  templateUrl: "../debug/debug.component.html",
+  styleUrls: ["./layer.component.css"]
 })
-export class LayerComponent implements OnInit {
+@KonvaBind(Konva.Layer)
+export class LayerComponent extends Entity implements OnInit {
   initialized = false;
 
   @ContentChildren(Entity) entities: QueryList<Entity>;
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
+    super();
   }
+
+  ngOnInit() {}
 
   @Input() stage: Konva.Stage;
   layer: Konva.Layer;
+
+  public get node() {
+    return this.layer;
+  }
 
   public init() {
     this.layer = new Konva.Layer();
@@ -37,8 +50,5 @@ export class LayerComponent implements OnInit {
     this.layer.draw();
   }
 
-  public initChildren() {
-
-  }
-
+  public initChildren() {}
 }

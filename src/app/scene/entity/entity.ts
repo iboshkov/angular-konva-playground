@@ -4,10 +4,13 @@ import { nameof } from "../../../utils";
 const inputDecorator = Input();
 const outputDecorator = Output();
 
+const PROPERTIES_META_KEY = "konva_properties";
 function BindToMethod(drawableKey: string, fn = "text") {
   function actualDecorator(target, name) {
     console.log(target, name);
-
+    let propList = Reflect.getMetadata(PROPERTIES_META_KEY, target) || [];
+    propList.push(name);
+    Reflect.defineMetadata(PROPERTIES_META_KEY, propList, target);
     Object.defineProperty(target, name, {
       get: function() {
         const drawable = this[drawableKey];
@@ -15,7 +18,11 @@ function BindToMethod(drawableKey: string, fn = "text") {
         if (drawable) {
           const fnToCall = drawable[fn] as Function;
           if (fnToCall) {
-            return fnToCall.apply(drawable);
+            if (typeof fnToCall === "function") {
+              return fnToCall.apply(drawable);
+            } else {
+              return fnToCall;
+            }
           }
         }
 
@@ -28,10 +35,15 @@ function BindToMethod(drawableKey: string, fn = "text") {
         if (drawable) {
           const fnToCall = drawable[fn] as Function;
           if (fnToCall) {
-            fnToCall.apply(drawable, [value]);
+            if (typeof fnToCall === "function") {
+              fnToCall.apply(drawable, [value]);
+            } else {
+              drawable[fn] = value;
+            }
           }
 
-          drawable.getStage().draw();
+          const stage = drawable.getStage();
+          if (stage) stage.draw();
         }
       },
       enumerable: true,
@@ -122,9 +134,24 @@ export class Entity {
   private _node: Konva.Node;
 
   _debugVisible = false;
+  public get _visible() {
+    return this.opacity > 0;
+  }
+
+  public set _visible(value) {
+    this.opacity = value ? 1 : 0;
+  }
+
+  toggleDebug() {
+    this._debugVisible = !this._debugVisible;
+  }
 
   public get entName() {
     return this.constructor.name;
+  }
+
+  public toggleVisibility() {
+    this._visible = !this._visible;
   }
 
   public get node() {
@@ -143,7 +170,17 @@ export class Entity {
         // console.log(`Emitting ${evt}`);
       });
     });
-    this.node.on("dragmove", () => {});
+
+    const props = Reflect.getMetadata(
+      PROPERTIES_META_KEY,
+      this.constructor.prototype
+    );
+    props.forEach(element => {
+      console.log(`Prop ${element}`);
+      const val = this["_" + element];
+      if (val === undefined) return;
+      this[element] = val;
+    });
   }
 
   get(key) {

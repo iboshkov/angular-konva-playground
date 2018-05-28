@@ -3,31 +3,29 @@ import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
+const rectProps = ["cornerRadius"];
+
 @Component({
-  selector: "app-circle",
+  selector: "app-rect",
   templateUrl: "../debug/debug.component.html",
-  styleUrls: ["./circle.component.css"],
-  providers: [
-    { provide: Entity, useExisting: forwardRef(() => CircleComponent) }
-  ]
+  styleUrls: ["./rect.component.css"],
+  providers: [{ provide: Entity, useExisting: forwardRef(() => RectComponent) }]
 })
-@KonvaBind(Konva.Circle.prototype)
-export class CircleComponent extends Shape implements OnInit {
-  node: Konva.Circle;
+@KonvaBind(Konva.Rect.prototype)
+export class RectComponent extends Shape implements OnInit {
+  node: Konva.Rect;
 
   @NodeBinding("draggable")
   @Input()
   public draggable = true;
 
   public init() {
-    console.log(this.fill);
-    this.node = new Konva.Circle({
+    this.node = new Konva.Rect({
       x: 0, //this.stage.getWidth() / 2,
       y: 0, //this.stage.getHeight() / 2,
-      radius: this.radius,
       fill: this.fill,
-      stroke: "black",
-      strokeWidth: 4
+      stroke: this.stroke,
+      strokeWidth: this.strokeWidth
     });
     this.node.draggable(this.draggable);
     setInterval(() => {
