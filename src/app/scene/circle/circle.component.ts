@@ -15,10 +15,6 @@ import { Shape } from "../shape/shape";
 export class CircleComponent extends Shape implements OnInit {
   node: Konva.Circle;
 
-  @NodeBinding("draggable")
-  @Input()
-  public draggable = true;
-
   public init() {
     console.log(this.fill);
     this.node = new Konva.Circle({
@@ -29,7 +25,7 @@ export class CircleComponent extends Shape implements OnInit {
       stroke: "black",
       strokeWidth: 4
     });
-    this.node.draggable(this.draggable);
+    // this.node.draggable(this.draggable);
     setInterval(() => {
       const x = this.node["x"];
       // x.apply(this.node, [x.apply(this.node) - 1]);

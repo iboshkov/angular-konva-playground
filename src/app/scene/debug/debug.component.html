@@ -7,6 +7,7 @@
     <label class="card-header-icon checkbox">
       <input type="checkbox" [(ngModel)]="_visible">
     </label>
+
     <a href="#" class="card-header-icon" aria-label="more options">
       <span (click)="toggleDebug()" class="icon" *ngIf="_debugVisible">
         <i class="fas fa-angle-up" aria-hidden="true"></i>
@@ -14,9 +15,7 @@
       <span (click)="toggleDebug()" class="icon" *ngIf="!_debugVisible">
         <i class="fas fa-angle-down" aria-hidden="true"></i>
       </span>
-
     </a>
-
   </header>
 
   <div *ngIf="_debugVisible" class="card-content">

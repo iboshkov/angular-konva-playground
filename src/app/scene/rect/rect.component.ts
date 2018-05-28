@@ -11,28 +11,17 @@ const rectProps = ["cornerRadius"];
   styleUrls: ["./rect.component.css"],
   providers: [{ provide: Entity, useExisting: forwardRef(() => RectComponent) }]
 })
-@KonvaBind(Konva.Rect.prototype)
+@KonvaBind(Konva.Rect.prototype, [], rectProps)
 export class RectComponent extends Shape implements OnInit {
   node: Konva.Rect;
 
-  @NodeBinding("draggable")
-  @Input()
-  public draggable = true;
-
   public init() {
     this.node = new Konva.Rect({
-      x: 0, //this.stage.getWidth() / 2,
-      y: 0, //this.stage.getHeight() / 2,
-      fill: this.fill,
-      stroke: this.stroke,
-      strokeWidth: this.strokeWidth
+      x: 0,
+      y: 0,
+      fill: "black"
     });
     this.node.draggable(this.draggable);
-    setInterval(() => {
-      const x = this.node["x"];
-      // x.apply(this.node, [x.apply(this.node) - 1]);
-      this.node.getLayer().draw();
-    }, 100);
     super.init();
   }
 
