@@ -26,7 +26,7 @@ export class EntityComponent extends Entity implements OnInit {
   public init() {
     console.log('Stage set');
     // if (!this.layer) this.layer = this.stage.getLayer();
-    
+
     // create our shape
     this.circle = new Konva.Circle({
       x: this.stage.getWidth() / 2,

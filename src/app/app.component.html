@@ -1,13 +1,16 @@
 <div class="container">
-    <h2>App</h2>
-    <button (click)="addStuff()">Add Stuff</button>
-    Width <input type="number" [(ngModel)]="radius">
-    height <input type="text" [(ngModel)]="fill">
-    Draggable <input type="checkbox" [(ngModel)]="draggable">
-    <app-stage>
-      <!-- <app-entity *ngFor="let x of stuff"></app-entity> -->
-      <app-layer>
-        <app-circle *ngFor="let x of stuff" [draggable]="draggable" [radius]="radius" [fill]="fill"></app-circle>
-      </app-layer>
-    </app-stage>
+  <input type="text" [(ngModel)]="text">
+  <button (click)="addStuff()">Add Stuff</button>
+  <app-stage>
+    <!-- <app-entity *ngFor="let x of stuff"></app-entity> -->
+    <app-layer>
+      <app-text text="Test 123"></app-text>
+      <app-group *ngFor="let x of stuff" [x]="330" [y]="330">
+        <app-circle (dragmove)="nodeClicked($event)" [radius]="radius" [fill]="fill"></app-circle>
+        <app-text [text]="x"></app-text>
+      </app-group>
+      <!-- <app-text  [draggable]="true" text="Test 123"></app-text> -->
+      <!-- <app-circle (click)="nodeClicked($event)" *ngFor="let x of stuff" [draggable]="draggable" [radius]="radius" [fill]="fill"></app-circle>  -->
+    </app-layer>
+  </app-stage>
 </div>

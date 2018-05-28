@@ -7,6 +7,8 @@ import { StageComponent } from './scene/scene/stage.component';
 import { EntityComponent } from './scene/entity/entity.component';
 import { LayerComponent } from './scene/layer/layer.component';
 import { CircleComponent } from './scene/circle/circle.component';
+import { TextComponent } from './scene/text/text.component';
+import { GroupComponent } from './scene/group/group.component';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import { CircleComponent } from './scene/circle/circle.component';
     StageComponent,
     EntityComponent,
     LayerComponent,
-    CircleComponent
+    CircleComponent,
+    TextComponent,
+    GroupComponent
   ],
   imports: [
     BrowserModule,

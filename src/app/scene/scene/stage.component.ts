@@ -30,8 +30,8 @@ export class StageComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.stage = new Konva.Stage({
       container: 'container',   // id of container <div>
-      width: 500,
-      height: 500
+      width: 1024,
+      height: 1024
     });
 
     this.layer = new Konva.Layer();
