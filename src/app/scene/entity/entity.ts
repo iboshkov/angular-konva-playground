@@ -8,6 +8,7 @@ const PROPERTIES_META_KEY = "konva_properties";
 function BindToMethod(drawableKey: string, fn = "text") {
   function actualDecorator(target, name) {
     console.log(target, name);
+    if (name === "node") return;
     let propList = Reflect.getMetadata(PROPERTIES_META_KEY, target) || [];
     propList.push(name);
     Reflect.defineMetadata(PROPERTIES_META_KEY, propList, target);
@@ -159,6 +160,7 @@ export class Entity {
   }
 
   public set node(value) {
+    if (!value) return;
     this._node = value;
     eventList.forEach(evt => {
       const emitterKey = `${evt}`;
@@ -178,7 +180,7 @@ export class Entity {
     props.forEach(element => {
       console.log(`Prop ${element}`);
       const val = this["_" + element];
-      if (val === undefined) return;
+      if (element === "node" || val === undefined) return;
       this[element] = val;
     });
   }

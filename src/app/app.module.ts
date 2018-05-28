@@ -10,6 +10,7 @@ import { CircleComponent } from './scene/circle/circle.component';
 import { TextComponent } from './scene/text/text.component';
 import { GroupComponent } from './scene/group/group.component';
 import { RectComponent } from './scene/rect/rect.component';
+import { TransformerComponent } from './scene/transformer/transformer.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { RectComponent } from './scene/rect/rect.component';
     CircleComponent,
     TextComponent,
     GroupComponent,
-    RectComponent
+    RectComponent,
+    TransformerComponent
   ],
   imports: [
     BrowserModule,
