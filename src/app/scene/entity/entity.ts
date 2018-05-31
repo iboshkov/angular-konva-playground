@@ -32,7 +32,7 @@ function BindToMethod(drawableKey: string, fn = "text") {
       set: function(value) {
         this["_" + name] = value;
         const drawable = this[drawableKey];
-        console.log(`Setting ${name}`);
+        // console.log(`Setting ${name}`);
         if (drawable) {
           const fnToCall = drawable[fn] as Function;
           if (fnToCall) {
@@ -70,16 +70,15 @@ export function KonvaBind(otherTarget, events: string[] = [], otherProps = []) {
       .forEach(prop => {
         let name = (prop.startsWith("set") && prop.substring(3)) || prop;
         name = name[0].toLowerCase() + name.slice(1);
-        console.log(`Adding ${name}`);
+        // console.log(`Adding ${name}`);
         target.prototype[name] = undefined;
         inputDecorator(target.prototype, name);
         NodeBinding(name)(target.prototype, name);
       });
-    let evtList = Reflect.getMetadata(EVENTS_META_KEY, target.prototype);
-    if ((!evtList || evtList.length === 0) && eventList) {
-      Reflect.defineMetadata(EVENTS_META_KEY, eventList, target.prototype);
-      evtList = eventList;
-    }
+    let evtList = Reflect.getMetadata(EVENTS_META_KEY, target) || eventList;
+    evtList = evtList.concat(events);
+      
+    Reflect.defineMetadata(EVENTS_META_KEY, evtList, target);
 
     if (!evtList) {
       throw new Error("Event list not defined");
@@ -87,9 +86,10 @@ export function KonvaBind(otherTarget, events: string[] = [], otherProps = []) {
 
     evtList.forEach(evt => {
       console.log(`Adding event ${evt}`);
+      const key = `${EMITTER_PREFIX}_${evt}`;
+      
       Object.defineProperty(target.prototype, evt, {
         get: function() {
-          const key = `${EMITTER_PREFIX}_${evt}`;
           let emitter = this[key];
           if (!emitter) {
             emitter = this[key] = new EventEmitter<any>();
@@ -97,6 +97,7 @@ export function KonvaBind(otherTarget, events: string[] = [], otherProps = []) {
           return emitter;
         },
         set: function(value) {
+          this[key] = value;
           console.warn(`Tried to set ${evt} event emitter`);
         },
         enumerable: true,
@@ -121,7 +122,7 @@ const eventList = [
   "dblclick",
   "dragstart",
   "dragmove",
-  "dragend"
+  "dragend",
 ];
 
 export interface EntityEvent {
@@ -129,18 +130,18 @@ export interface EntityEvent {
   event: any;
 }
 
-@KonvaBind(Konva.Node.prototype, eventList)
+@KonvaBind(Konva.Node.prototype)
 export class Entity {
   public initialized = false;
   private _node: Konva.Node;
 
   _debugVisible = false;
   public get _visible() {
-    return this.opacity > 0;
+    return this.get("opacity") > 0;
   }
 
   public set _visible(value) {
-    this.opacity = value ? 1 : 0;
+    this.set("opacity", value ? 1 : 0);
   }
 
   toggleDebug() {
@@ -162,13 +163,17 @@ export class Entity {
   public set node(value) {
     if (!value) return;
     this._node = value;
-    eventList.forEach(evt => {
+    let evtList = Reflect.getMetadata(EVENTS_META_KEY, this.constructor);
+
+    evtList.forEach(evt => {
       const emitterKey = `${evt}`;
       const emitter = this[emitterKey] as EventEmitter<any>;
 
-      console.log("Subbing ", emitterKey);
+      console.log(`Subbing ${this.constructor.name}`, emitterKey);
       this.node.on(evt, val => {
-        emitter.emit({ sender: this, event: val });
+        if (emitter.emit) {
+          emitter.emit({ sender: this, event: val });
+        }
         // console.log(`Emitting ${evt}`);
       });
     });
@@ -178,7 +183,7 @@ export class Entity {
       this.constructor.prototype
     );
     props.forEach(element => {
-      console.log(`Prop ${element}`);
+      // console.log(`Prop ${element}`);
       const val = this["_" + element];
       if (element === "node" || val === undefined) return;
       this[element] = val;
@@ -189,12 +194,16 @@ export class Entity {
     return this[key];
   }
 
+  set(key, val) {
+    return this[key] = val;
+  }
+
   @Input() stage: Konva.Stage;
   @Input() layer: Konva.Layer;
 
   constructor() {}
 
-  public init() {
+  public async init() {
     this.initialized = true;
   }
 }

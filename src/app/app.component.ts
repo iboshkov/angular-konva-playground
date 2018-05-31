@@ -26,7 +26,11 @@ export class AppComponent implements OnInit {
 
   nodeClicked(event: EntityEvent) {
     if (!event.sender) return;
-    event.sender.fill = Konva.Util.getRandomColor();
+    event.sender['fill'] = Konva.Util.getRandomColor();
+  }
+
+  beforeDraw(ev) {
+    console.log("Before draw ", ev);
   }
 
   /**

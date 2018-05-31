@@ -26,23 +26,23 @@ const transformerProps = ["attachTo"];
 export class TransformerComponent extends Entity implements OnInit {
   node: Konva.Transformer;
   @ContentChildren(Entity) entities: QueryList<Entity>;
-  public init() {
+  public async init() {
     this.node = new Konva.Transformer({
       x: 0,
-      y: 0
+      y: 0,
+      keepRatio: false,
     });
-    this.node.draggable(this.draggable);
     this.entities.changes.subscribe(this.syncChildren.bind(this));
     this.syncChildren();
-    super.init();
+    await super.init();
   }
 
   public syncChildren() {
-    this.entities.filter(ent => ent !== this).forEach(ent => {
+    this.entities.filter(ent => ent !== this).forEach(async ent => {
       if (!ent.initialized) {
         ent.stage = this.stage;
         ent.layer = this.layer;
-        ent.init();
+        await ent.init()
         this.layer.add(ent.node);
         this.node.attachTo(ent.node);
       }

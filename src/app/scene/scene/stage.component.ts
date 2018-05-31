@@ -19,12 +19,19 @@ export class StageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     console.log(`We have ${this.layers.length} layers`);
-    this.layers.forEach(layer => {
-      layer.stage = this.stage;
-      layer.init();
-      this.stage.add(layer.layer);
-    });
+    this.syncChildren();
+    this.layers.changes.subscribe(this.syncChildren.bind(this));
     console.log(this.stage);
+  }
+
+  syncChildren() {
+    this.layers.forEach(async (layer) => {
+      layer.stage = this.stage;
+      if (!layer.initialized) {
+        await layer.init();
+        this.stage.add(layer.layer);
+      }
+    });
   }
 
   ngOnInit() {

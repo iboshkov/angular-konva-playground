@@ -4,23 +4,29 @@
   <app-stage>
     <!-- <app-entity *ngFor="let x of stuff"></app-entity> -->
     <app-layer>
-      <app-rect [width]="100" [height]="100" fill="black"></app-rect>
-      <app-text text="Test 123"></app-text>
-      <app-group *ngFor="let x of stuff" [x]="330" [y]="330">
-        <app-circle (dragmove)="nodeClicked($event)" [radius]="radius" [fill]="fill"></app-circle>
-        <app-text [text]="x"></app-text>
-      </app-group>
-      <!-- <app-text  [draggable]="true" text="Test 123"></app-text> -->
-      <!-- <app-circle (click)="nodeClicked($event)" *ngFor="let x of stuff" [draggable]="draggable" [radius]="radius" [fill]="fill"></app-circle>  -->
+      <app-image [draggable]="true" imageSrc="https://images.unsplash.com/photo-1489008777659-ad1fc8e07097?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e834115d1303a6a9b7d31e24b451a131&auto=format&fit=crop&w=1950&q=80">
+      </app-image>
+      
     </app-layer>
-    <app-layer>
+
+    <app-layer [draggable]="true">          
+      <app-rect [cornerRadius]="10" [width]="100" [height]="100" fill="red"></app-rect>
+
+    <app-layer [draggable]="true">          
+        <app-rect [cornerRadius]="10" [width]="100" [height]="100" fill="green"></app-rect>
+      </app-layer>
+    </app-layer>
+    <app-layer >
       <app-transformer>
         <app-group [x]="200" [y]="250" [draggable]="true">
-          <app-rect [cornerRadius]="10" [width]="100" [height]="100" fill="red"></app-rect>
+        <app-rect [cornerRadius]="10" [width]="100" [height]="100" fill="red"></app-rect>
           <app-text [x]="5" [y]="5" fill="white" text="Test 123"></app-text>
         </app-group>
       </app-transformer>
-
     </app-layer>
+
+    <app-annotation *ngFor = "let x of stuff">
+      
+      </app-annotation>
   </app-stage>
 </div>

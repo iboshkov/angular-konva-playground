@@ -15,13 +15,12 @@ import { Shape } from "../shape/shape";
 export class CircleComponent extends Shape implements OnInit {
   node: Konva.Circle;
 
-  public init() {
-    console.log(this.fill);
+  public async init() {
     this.node = new Konva.Circle({
       x: 0, //this.stage.getWidth() / 2,
       y: 0, //this.stage.getHeight() / 2,
-      radius: this.radius,
-      fill: this.fill,
+      radius: this.get("radius"),
+      fill: this.get("fill"),
       stroke: "black",
       strokeWidth: 4
     });
@@ -31,7 +30,7 @@ export class CircleComponent extends Shape implements OnInit {
       // x.apply(this.node, [x.apply(this.node) - 1]);
       this.node.getLayer().draw();
     }, 100);
-    super.init();
+    await super.init();
   }
 
   constructor() {

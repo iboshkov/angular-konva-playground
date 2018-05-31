@@ -4,7 +4,9 @@ import {
   Input,
   ContentChildren,
   QueryList,
-  AfterViewInit
+  AfterViewInit,
+  forwardRef,
+  ViewChildren
 } from "@angular/core";
 import * as Konva from "konva";
 import { Entity, KonvaBind } from "../entity/entity";
@@ -12,13 +14,18 @@ import { Entity, KonvaBind } from "../entity/entity";
 @Component({
   selector: "app-layer",
   templateUrl: "../debug/debug.component.html",
-  styleUrls: ["./layer.component.css"]
+  styleUrls: ["./layer.component.css"],
+  providers: [
+    { provide: Entity, useExisting: forwardRef(() => LayerComponent) }
+  ]
 })
-@KonvaBind(Konva.Layer)
+@KonvaBind(Konva.Layer, ["beforeDraw"])
 export class LayerComponent extends Entity implements OnInit {
   initialized = false;
 
   @ContentChildren(Entity) entities: QueryList<Entity>;
+  @ViewChildren(Entity) viewEntities: QueryList<Entity>;
+  
   constructor() {
     super();
   }
@@ -26,29 +33,41 @@ export class LayerComponent extends Entity implements OnInit {
   ngOnInit() {}
 
   @Input() stage: Konva.Stage;
-  layer: Konva.Layer;
+  node: Konva.Layer;
 
-  public get node() {
-    return this.layer;
+  public get layer() {
+    return this.node;
   }
 
-  public init() {
-    this.layer = new Konva.Layer();
-    this.entities.changes.subscribe(this.syncChildren.bind(this));
-    this.syncChildren();
+  public async init() {
+    this.node = new Konva.Layer();
+    this.entities.changes.subscribe(() => this.syncChildren(this.entities));
+    this.entities.changes.subscribe(() => this.syncChildren(this.viewEntities));
+    this.syncChildren(this.entities);
+    this.syncChildren(this.viewEntities);
+    // this.layer.on('beforeDraw', function() {
+    //   console.log("Before draw");
+    // });
+    await super.init();
   }
 
-  public syncChildren() {
-    this.entities.forEach(ent => {
-      if (!ent.initialized) {
+  addChild(child) {
+    this.node.add(child.node);
+    this.node.draw();    
+  }
+
+  public syncChildren(entities) {
+    entities.forEach(async ent => {
+      if (!ent.initialized && ent !== this) {
         ent.stage = this.stage;
-        ent.layer = this.layer;
-        ent.init();
-        this.layer.add(ent.node);
+        if (!(ent instanceof LayerComponent)) {
+          ent.layer = this.node;
+        }
+        await ent.init()
+        this.addChild(ent);
       }
     });
-    this.layer.draw();
   }
 
-  public initChildren() {}
+  public async initChildren() {}
 }

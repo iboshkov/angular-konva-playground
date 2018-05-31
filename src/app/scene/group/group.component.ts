@@ -25,7 +25,7 @@ export class GroupComponent extends Entity implements OnInit {
   node: Konva.Group;
   @ContentChildren(Entity) entities: QueryList<Entity>;
 
-  public init() {
+  public async init() {
     this.node = new Konva.Group({
       x: 0,
       y: 0
@@ -34,15 +34,15 @@ export class GroupComponent extends Entity implements OnInit {
     this.entities.changes.subscribe(this.syncChildren.bind(this));
     this.syncChildren();
 
-    super.init();
+    await super.init();
   }
   public syncChildren() {
-    this.entities.forEach(ent => {
+    this.entities.forEach(async ent => {
       if (ent === this) return;
       if (!ent.initialized) {
         ent.stage = this.stage;
         ent.layer = this.layer;
-        ent.init();
+        await ent.init()
         this.node.add(ent.node);
       }
     });

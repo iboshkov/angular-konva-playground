@@ -23,7 +23,7 @@ export class EntityComponent extends Entity implements OnInit {
   ngOnInit() {
   }
 
-  public init() {
+  public async init() {
     console.log('Stage set');
     // if (!this.layer) this.layer = this.stage.getLayer();
 

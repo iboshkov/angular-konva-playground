@@ -15,14 +15,13 @@ const rectProps = ["cornerRadius"];
 export class RectComponent extends Shape implements OnInit {
   node: Konva.Rect;
 
-  public init() {
+  public async init() {
     this.node = new Konva.Rect({
       x: 0,
       y: 0,
       fill: "black"
     });
-    this.node.draggable(this.draggable);
-    super.init();
+    await super.init();
   }
 
   constructor() {

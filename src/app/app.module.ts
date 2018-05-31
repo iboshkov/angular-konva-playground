@@ -11,6 +11,9 @@ import { TextComponent } from './scene/text/text.component';
 import { GroupComponent } from './scene/group/group.component';
 import { RectComponent } from './scene/rect/rect.component';
 import { TransformerComponent } from './scene/transformer/transformer.component';
+import { AnnotationComponent, ControlPoint } from './annotation/annotation.component';
+import { LineComponent } from './scene/line/line.component';
+import { ImageComponent } from './scene/image/image.component';
 
 
 @NgModule({
@@ -23,7 +26,11 @@ import { TransformerComponent } from './scene/transformer/transformer.component'
     TextComponent,
     GroupComponent,
     RectComponent,
-    TransformerComponent
+    TransformerComponent,
+    AnnotationComponent,
+    ControlPoint,
+    LineComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
