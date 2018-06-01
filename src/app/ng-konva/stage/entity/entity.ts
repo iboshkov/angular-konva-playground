@@ -1,12 +1,20 @@
 import * as Konva from "konva";
-import { Component, Input, Output, EventEmitter, ContentChildren, ViewChildren, QueryList } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ContentChildren,
+  ViewChildren,
+  QueryList
+} from "@angular/core";
 const inputDecorator = Input();
 const outputDecorator = Output();
 
 const PROPERTIES_META_KEY = "konva_properties";
 function BindToMethod(drawableKey: string, fn = "text") {
   function actualDecorator(target, name) {
-    console.log(target, name);
+    // console.log(target, name);
     if (name === "node") return;
     let propList = Reflect.getMetadata(PROPERTIES_META_KEY, target) || [];
     propList.push(name);
@@ -34,12 +42,16 @@ function BindToMethod(drawableKey: string, fn = "text") {
         // console.log(`Setting ${name}`);
         if (drawable) {
           const fnToCall = drawable[fn] as Function;
+          const setterKey = "set" + fn[0].toUpperCase() + fn.slice(1);
+          const setterCall = drawable[setterKey] as Function;
           if (fnToCall) {
             if (typeof fnToCall === "function") {
               fnToCall.apply(drawable, [value]);
             } else {
               drawable[fn] = value;
             }
+          } else if (typeof setterCall === "function") {
+            setterCall.apply(drawable, [value]);
           }
 
           const stage = drawable.getStage();
@@ -62,7 +74,7 @@ const EVENTS_META_KEY = "konva_events";
 const EMITTER_PREFIX = "_event_emitter";
 export function KonvaBind(otherTarget, events: string[] = [], otherProps = []) {
   return function(target) {
-    console.log(otherTarget);
+    // console.log(otherTarget);
     Object.getOwnPropertyNames(otherTarget)
       .filter(x => x.startsWith("set"))
       .concat(otherProps)
@@ -76,7 +88,7 @@ export function KonvaBind(otherTarget, events: string[] = [], otherProps = []) {
       });
     let evtList = Reflect.getMetadata(EVENTS_META_KEY, target) || eventList;
     evtList = evtList.concat(events);
-      
+
     Reflect.defineMetadata(EVENTS_META_KEY, evtList, target);
 
     if (!evtList) {
@@ -84,14 +96,14 @@ export function KonvaBind(otherTarget, events: string[] = [], otherProps = []) {
     }
 
     evtList.forEach(evt => {
-      console.log(`Adding event ${evt}`);
+      // console.log(`Adding event ${evt}`);
       const key = `${EMITTER_PREFIX}_${evt}`;
-      
+
       Object.defineProperty(target.prototype, evt, {
         get: function() {
           let emitter = this[key];
           if (!emitter) {
-            emitter = this[key] = new EventEmitter<any>();
+            emitter = this[key] = new EventEmitter<EntityEvent>();
           }
           return emitter;
         },
@@ -121,12 +133,12 @@ const eventList = [
   "dblclick",
   "dragstart",
   "dragmove",
-  "dragend",
+  "dragend"
 ];
 
 export interface EntityEvent {
   sender: Entity;
-  event: any;
+  event?: any;
 }
 
 @KonvaBind(Konva.Node.prototype)
@@ -138,7 +150,24 @@ export class Entity {
 
   public static readonly COMPONENT_KEY = "__ng-konva-component";
 
-  _debugVisible = false;
+  public component: Entity = this;
+  _debugEnabled = false;
+  @Input()
+  get debugEnabled() {
+    let enabled = this._debugEnabled;
+    let node = this.parent;
+    while (node) {
+      enabled = enabled || node.debugEnabled;
+      node = node.parent;
+    }
+    return enabled;
+  }
+  set debugEnabled(val) {
+    this._debugEnabled = val;
+  }
+
+  @Input() debugVisible = false;
+
   public get _visible() {
     return this.get("opacity") > 0;
   }
@@ -148,7 +177,7 @@ export class Entity {
   }
 
   toggleDebug() {
-    this._debugVisible = !this._debugVisible;
+    this.debugVisible = !this.debugVisible;
   }
 
   public get entName() {
@@ -170,9 +199,9 @@ export class Entity {
 
     evtList.forEach(evt => {
       const emitterKey = `${evt}`;
-      const emitter = this[emitterKey] as EventEmitter<any>;
+      const emitter = this[emitterKey] as EventEmitter<EntityEvent>;
 
-      console.log(`Subbing ${this.constructor.name}`, emitterKey);
+      // console.log(`Subbing ${this.constructor.name}`, emitterKey);
       this.node.on(evt, val => {
         if (emitter.emit) {
           emitter.emit({ sender: this, event: val });
@@ -193,14 +222,12 @@ export class Entity {
     });
   }
 
-
-  get<T=any>(key) {
+  get<T = any>(key) {
     return this[key] as T;
   }
   set(key, val) {
-    return this[key] = val;
+    return (this[key] = val);
   }
-
 
   @ContentChildren(Entity) entities: QueryList<Entity>;
   @ViewChildren(Entity) viewEntities: QueryList<Entity>;
@@ -208,27 +235,32 @@ export class Entity {
   @Input() stage: Konva.Stage;
   @Input() layer: Konva.Layer;
 
-  constructor() {}
+  @Output() public postInit = new EventEmitter<EntityEvent>();
 
+  constructor() {}
 
   addChild(child) {
     throw new Error("Not implemented");
   }
 
-  public syncChildren(entities) {
-    return Promise.all(entities.map(async ent => {
-      if (!ent.initialized && ent !== this) {
-        ent.stage = this.stage;
-        ent.layer = this.layer;
-        ent.parent = this;
-        await ent.init();
-        this.addChild(ent);
-      }
-    }));
+  public async syncChildren(entities) {
+    await Promise.all(
+      entities.map(async ent => {
+        if (!ent.initialized && ent !== this) {
+          ent.stage = this.stage;
+          if (this.layer) {
+            ent.layer = this.layer;
+          }
+          ent.parent = this;
+          await ent.init();
+          this.addChild(ent);
+        }
+      })
+    );
+    this.stage.draw();
   }
 
-
-  public findClosestOfType<T extends Entity>(type: (new () => T)) {
+  public findClosestOfType<T extends Entity>(type: new () => T) {
     let instance = this.parent;
     while (instance.entName !== type.name) {
       if (instance.parent === undefined) {
@@ -237,13 +269,15 @@ export class Entity {
       }
       instance = instance.parent;
     }
-    
+
     return <T>instance;
   }
 
   public async initChildren() {
     this.entities.changes.subscribe(() => this.syncChildren(this.entities));
-    this.viewEntities.changes.subscribe(() => this.syncChildren(this.viewEntities));
+    this.viewEntities.changes.subscribe(() =>
+      this.syncChildren(this.viewEntities)
+    );
     await this.syncChildren(this.entities);
     await this.syncChildren(this.viewEntities);
   }

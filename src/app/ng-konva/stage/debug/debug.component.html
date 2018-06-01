@@ -1,42 +1,42 @@
-<article class="card">
+<article *ngIf="component.debugEnabled" class="card">
   <header class="card-header">
     <p class="card-header-title">
-      <strong style="padding: 10px; cursor: pointer;" (click)="toggleDebug()">Debug [{{entName}}]</strong>
+      <strong style="padding: 10px; cursor: pointer;" (click)="component.toggleDebug()">Debug [{{component.entName}}]</strong>
     </p>
 
     <label class="card-header-icon checkbox">
-      <input type="checkbox" [(ngModel)]="_visible">
+      <input type="checkbox" [(ngModel)]="component._visible">
     </label>
 
     <a href="#" class="card-header-icon" aria-label="more options">
-      <span (click)="toggleDebug()" class="icon" *ngIf="_debugVisible">
+      <span (click)="component.toggleDebug()" class="icon" *ngIf="component.debugVisible">
         <i class="fas fa-angle-up" aria-hidden="true"></i>
       </span>
-      <span (click)="toggleDebug()" class="icon" *ngIf="!_debugVisible">
+      <span (click)="component.toggleDebug()" class="icon" *ngIf="!component.debugVisible">
         <i class="fas fa-angle-down" aria-hidden="true"></i>
       </span>
     </a>
   </header>
 
-  <div *ngIf="_debugVisible" class="card-content">
+  <div *ngIf="component.debugVisible" class="card-content">
     <div class="content">
 
       <div class="field is-horizontal">
         <div class="field-body">
           <div class="field">
             <label class="checkbox">
-              <input type="checkbox" [(ngModel)]="draggable"> Draggable
+              <input type="checkbox" [(ngModel)]="component.draggable"> Draggable
             </label>
           </div>
 
           <div class="field">
             <p class="control">
-              <input class="input" type="number" [(ngModel)]="fontSize" placeholder="Font size">
+              <input class="input" type="number" [(ngModel)]="component.fontSize" placeholder="Font size">
             </p>
           </div>
           <div class="field">
             <p class="control">
-              <input class="input" type="number" [(ngModel)]="opacity" placeholder="Opacity">
+              <input class="input" type="number" [(ngModel)]="component.opacity" placeholder="Opacity">
             </p>
           </div>
         </div>
@@ -45,34 +45,34 @@
         <div class="field-body">
           <div class="field">
             <p class="control">
-              <input class="input" type="number" [(ngModel)]="x" placeholder="X">
+              <input class="input" type="number" [(ngModel)]="component.x" placeholder="X">
             </p>
           </div>
           <div class="field">
             <p class="control">
-              <input class="input" type="number" [(ngModel)]="y" placeholder="Y">
+              <input class="input" type="number" [(ngModel)]="component.y" placeholder="Y">
             </p>
           </div>
           <div class="field">
             <p class="control">
-              <input class="input" type="number" [(ngModel)]="width" placeholder="Width">
+              <input class="input" type="number" [(ngModel)]="component.width" placeholder="Width">
             </p>
           </div>
           <div class="field">
             <p class="control">
-              <input class="input" type="number" [(ngModel)]="height" placeholder="Height">
+              <input class="input" type="number" [(ngModel)]="component.height" placeholder="Height">
             </p>
           </div>
 
           <div class="field">
             <p class="control">
-              <input class="input" type="text" [(ngModel)]="text" placeholder="Text">
+              <input class="input" type="text" [(ngModel)]="component.text" placeholder="Text">
             </p>
           </div>
 
           <div class="field">
             <p class="control has-icons-left">
-              <input class="input" type="text" [(ngModel)]="fill" placeholder="Fill">
+              <input class="input" type="text" [(ngModel)]="component.fill" placeholder="Fill">
               <span class="icon is-small is-left">
                 <i class="fas fa-paint-brush"></i>
               </span>
@@ -80,7 +80,7 @@
           </div>
           <div class="field">
             <p class="control has-icons-left">
-              <input class="input" type="text" [(ngModel)]="stroke" placeholder="Stroke">
+              <input class="input" type="text" [(ngModel)]="component.stroke" placeholder="Stroke">
               <span class="icon is-small is-left">
                 <i class="fas fa-paint-brush"></i>
               </span>
@@ -88,7 +88,7 @@
           </div>
           <div class="field">
             <p class="control has-icons-left">
-              <input class="input" type="number" [(ngModel)]="strokeWidth" placeholder="Stroke">
+              <input class="input" type="number" [(ngModel)]="component.strokeWidth" placeholder="Stroke">
               <span class="icon is-small is-left">
                 <i class="fas fa-paint-brush"></i>
               </span>

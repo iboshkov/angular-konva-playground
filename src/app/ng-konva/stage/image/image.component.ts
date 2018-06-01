@@ -9,16 +9,17 @@ const imageProps = ["points", "closed"];
   selector: "konva-image",
   templateUrl: "../debug/debug.component.html",
   styleUrls: ["./image.component.css"],
-  providers: [{ provide: Entity, useExisting: forwardRef(() => ImageComponent) }]
+  providers: [
+    { provide: Entity, useExisting: forwardRef(() => ImageComponent) }
+  ]
 })
 @KonvaBind(Konva.Image.prototype, [], imageProps)
 export class ImageComponent extends Shape implements OnInit {
   node: Konva.Image;
 
-  @Input()
-  public imageSrc : string | null = null;
+  @Input() public imageSrc: string | null = null;
 
-  public async loadImage(src) : Promise<HTMLImageElement> {    
+  public async loadImage(src): Promise<HTMLImageElement> {
     return new Promise<HTMLImageElement>((resolve, reject) => {
       const img = document.createElement("img");
       img.src = src;
@@ -29,12 +30,13 @@ export class ImageComponent extends Shape implements OnInit {
   }
 
   public async init() {
-    const image = await this.loadImage(this.imageSrc)
-    
+    const image = await this.loadImage(this.imageSrc);
+
     this.node = new Konva.Image({
       image
     });
     await super.init();
+    this.postInit.emit({ sender: this });
   }
 
   constructor() {

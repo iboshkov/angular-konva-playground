@@ -1,0 +1,8 @@
+<div>
+    <konva-debug [component]="this">
+        <ng-content></ng-content>
+    </konva-debug>
+
+    <div (resize)="containerResized($event)" (wheel)="onWheel($event)" id="container">
+    </div>
+</div>
