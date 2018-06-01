@@ -5,7 +5,7 @@ import { Entity } from '../entity/entity';
 import { LayerComponent } from '../layer/layer.component';
 
 @Component({
-  selector: 'app-stage',
+  selector: 'konva-stage',
   templateUrl: './stage.component.html',
   styleUrls: ['./stage.component.css']
 })

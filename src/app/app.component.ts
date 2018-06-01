@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { EntityEvent, Entity } from "./scene/entity/entity";
+import { EntityEvent, Entity } from "./ng-konva/scene/entity/entity";
 import * as Konva from "konva";
-import { EntityComponent } from "./scene/entity/entity.component";
+import { EntityComponent } from "./ng-konva/scene/entity/entity.component";
 
 @Component({
   selector: "app-root",

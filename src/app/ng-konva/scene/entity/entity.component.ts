@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, AfterViewInit, forwardRef } from '@angular/core';
 import * as Konva from 'konva';
-import { nameof } from '../../../utils';
 import { Entity } from './entity';
 
 @Component({
-  selector: 'app-entity',
+  selector: 'konva-entity',
   templateUrl: './entity.component.html',
   styleUrls: ['./entity.component.css'],
   providers: [{provide: Entity, useExisting: forwardRef(() => EntityComponent)}]

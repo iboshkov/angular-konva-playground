@@ -3,24 +3,22 @@ import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
+const lineProps = ["points", "closed"];
+
 @Component({
-  selector: "app-text",
+  selector: "konva-line",
   templateUrl: "../debug/debug.component.html",
-  styleUrls: ["./text.component.css"],
-  providers: [{ provide: Entity, useExisting: forwardRef(() => TextComponent) }]
+  styleUrls: ["./line.component.css"],
+  providers: [{ provide: Entity, useExisting: forwardRef(() => LineComponent) }]
 })
-@KonvaBind(Konva.Text.prototype)
-export class TextComponent extends Shape implements OnInit {
-  node: Konva.Text;
+@KonvaBind(Konva.Line.prototype, [], lineProps)
+export class LineComponent extends Shape implements OnInit {
+  node: Konva.Line;
 
   public async init() {
-    this.node = new Konva.Text({
-      x: 0,
-      y: 0,
-      text: this.get("text"),
-      fill: this.get("fill")
+    this.node = new Konva.Line({
+      points: [0, 0, 100, 100]
     });
-
     await super.init();
   }
 

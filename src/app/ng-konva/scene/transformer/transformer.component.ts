@@ -2,52 +2,54 @@ import {
   Component,
   Input,
   OnInit,
-  ContentChildren,
+  forwardRef,
+  ContentChild,
+  AfterContentInit,
   QueryList,
-  forwardRef
+  ContentChildren
 } from "@angular/core";
 import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
 import * as Konva from "konva";
+import { Shape } from "../shape/shape";
+
+const transformerProps = ["attachTo"];
 
 @Component({
-  selector: "app-group",
+  selector: "konva-transformer",
   templateUrl: "../debug/debug.component.html",
-  styleUrls: ["./group.component.css"],
+  styleUrls: ["./transformer.component.css"],
   providers: [
-    {
-      provide: Entity,
-      useExisting: forwardRef(() => GroupComponent)
-    }
+    { provide: Entity, useExisting: forwardRef(() => TransformerComponent) }
   ]
 })
-@KonvaBind(Konva.Group.prototype)
-export class GroupComponent extends Entity implements OnInit {
-  node: Konva.Group;
+@KonvaBind(Konva.Transformer.prototype, [], [])
+export class TransformerComponent extends Entity implements OnInit {
+  node: Konva.Transformer;
   @ContentChildren(Entity) entities: QueryList<Entity>;
-
   public async init() {
-    this.node = new Konva.Group({
+    this.node = new Konva.Transformer({
       x: 0,
-      y: 0
+      y: 0,
+      keepRatio: false,
     });
-    this.node.draggable(true);
     this.entities.changes.subscribe(this.syncChildren.bind(this));
     this.syncChildren();
-
     await super.init();
   }
+
   public syncChildren() {
-    this.entities.forEach(async ent => {
-      if (ent === this) return;
+    this.entities.filter(ent => ent !== this).forEach(async ent => {
       if (!ent.initialized) {
         ent.stage = this.stage;
         ent.layer = this.layer;
         await ent.init()
-        this.node.add(ent.node);
+        this.layer.add(ent.node);
+        this.node.attachTo(ent.node);
       }
     });
     this.layer.draw();
   }
+
   constructor() {
     super();
   }

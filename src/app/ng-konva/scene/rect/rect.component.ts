@@ -6,7 +6,7 @@ import { Shape } from "../shape/shape";
 const rectProps = ["cornerRadius"];
 
 @Component({
-  selector: "app-rect",
+  selector: "konva-rect",
   templateUrl: "../debug/debug.component.html",
   styleUrls: ["./rect.component.css"],
   providers: [{ provide: Entity, useExisting: forwardRef(() => RectComponent) }]

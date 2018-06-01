@@ -1,13 +1,13 @@
-<app-layer [draggable]="true" [opacity]="1" (beforeDraw)="beforeDraw()">
-    <app-group [opacity]="1" [x]="0" [y]="0">
-        <!-- <app-rect [opacity]="1" [x]="0" [y]="0" [cornerRadius]="10" [width]="100" [height]="100"></app-rect> -->
-        <app-line [closed]="true" stroke="red"></app-line>
-        <app-circle #controlPoint [draggable]="true" [radius]="10" [x]="topLeftX" [y]="topLeftY" fill="black"></app-circle>
-        <app-circle #controlPoint [draggable]="true" [radius]="10" [x]="topRightX" [y]="topRightY" fill="black"></app-circle>
-        <app-circle #controlPoint [draggable]="true" [radius]="10" [x]="bottomLeftX" [y]="bottomLeftY" fill="black"></app-circle>
-        <app-circle #controlPoint [draggable]="true" [radius]="10" [x]="bottomRightX" [y]="bottomRightY" fill="black"></app-circle>
-    </app-group>
-</app-layer> 
+<konva-layer [draggable]="true" [opacity]="1" (beforeDraw)="beforeDraw()">
+    <konva-group [opacity]="1" [x]="0" [y]="0">
+        <!-- <konva-rect [opacity]="1" [x]="0" [y]="0" [cornerRadius]="10" [width]="100" [height]="100"></konva-rect> -->
+        <konva-line [closed]="true" stroke="red"></konva-line>
+        <konva-circle #controlPoint [draggable]="true" [radius]="10" [x]="topLeftX" [y]="topLeftY" fill="black"></konva-circle>
+        <konva-circle #controlPoint [draggable]="true" [radius]="10" [x]="topRightX" [y]="topRightY" fill="black"></konva-circle>
+        <konva-circle #controlPoint [draggable]="true" [radius]="10" [x]="bottomLeftX" [y]="bottomLeftY" fill="black"></konva-circle>
+        <konva-circle #controlPoint [draggable]="true" [radius]="10" [x]="bottomRightX" [y]="bottomRightY" fill="black"></konva-circle>
+    </konva-group>
+</konva-layer> 
 <input type="number" [(ngModel)]="topLeftX" />
 <input type="number" [(ngModel)]="topLeftY" />
 <input type="number" [(ngModel)]="topRightX" />

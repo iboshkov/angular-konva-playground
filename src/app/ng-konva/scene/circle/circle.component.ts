@@ -4,7 +4,7 @@ import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
 @Component({
-  selector: "app-circle",
+  selector: "konva-circle",
   templateUrl: "../debug/debug.component.html",
   styleUrls: ["./circle.component.css"],
   providers: [

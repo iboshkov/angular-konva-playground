@@ -1,10 +1,10 @@
 import { Component, OnInit, forwardRef, ContentChildren, QueryList, ViewChildren, Directive } from '@angular/core';
-import { LayerComponent } from '../scene/layer/layer.component';
-import { Entity } from '../scene/entity/entity';
+import { LayerComponent } from '../ng-konva/scene/layer/layer.component';
+import { Entity } from '../ng-konva/scene/entity/entity';
 import { Layer, Line } from 'konva';
-import { CircleComponent } from '../scene/circle/circle.component';
-import { GroupComponent } from '../scene/group/group.component';
-import { LineComponent } from '../scene/line/line.component';
+import { CircleComponent } from '../ng-konva/scene/circle/circle.component';
+import { GroupComponent } from '../ng-konva/scene/group/group.component';
+import { LineComponent } from '../ng-konva/scene/line/line.component';
 
 @Directive({selector: 'control-point'})
 export class ControlPoint {

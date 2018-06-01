@@ -6,7 +6,7 @@ import { Shape } from "../shape/shape";
 const imageProps = ["points", "closed"];
 
 @Component({
-  selector: "app-image",
+  selector: "konva-image",
   templateUrl: "../debug/debug.component.html",
   styleUrls: ["./image.component.css"],
   providers: [{ provide: Entity, useExisting: forwardRef(() => ImageComponent) }]

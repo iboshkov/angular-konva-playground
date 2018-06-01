@@ -1,6 +1,5 @@
 import * as Konva from "konva";
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { nameof } from "../../../utils";
 const inputDecorator = Input();
 const outputDecorator = Output();
 
@@ -56,7 +55,7 @@ function BindToMethod(drawableKey: string, fn = "text") {
 }
 
 export function NodeBinding(fnToCall) {
-  return BindToMethod(nameof<Entity>("node"), fnToCall);
+  return BindToMethod("node", fnToCall);
 }
 
 const EVENTS_META_KEY = "konva_events";

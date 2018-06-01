@@ -12,7 +12,7 @@ import * as Konva from "konva";
 import { Entity, KonvaBind } from "../entity/entity";
 
 @Component({
-  selector: "app-layer",
+  selector: "konva-layer",
   templateUrl: "../debug/debug.component.html",
   styleUrls: ["./layer.component.css"],
   providers: [
