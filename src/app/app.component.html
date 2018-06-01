@@ -2,30 +2,24 @@
   <input type="text" [(ngModel)]="text">
   <button (click)="addStuff()">Add Stuff</button>
   <konva-stage>
-    <!-- <konva-entity *ngFor="let x of stuff"></konva-entity> -->
     <konva-layer>
-      <konva-image [draggable]="true" imageSrc="https://images.unsplash.com/photo-1489008777659-ad1fc8e07097?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e834115d1303a6a9b7d31e24b451a131&auto=format&fit=crop&w=1950&q=80">
-      </konva-image>
-      
-    </konva-layer>
+          <konva-image imageSrc="https://images.unsplash.com/photo-1489008777659-ad1fc8e07097?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e834115d1303a6a9b7d31e24b451a131&auto=format&fit=crop&w=1950&q=80">
+          </konva-image>
 
-    <konva-layer [draggable]="true">          
-      <konva-rect [cornerRadius]="10" [width]="100" [height]="100" fill="red"></konva-rect>
-
-    <konva-layer [draggable]="true">          
-        <konva-rect [cornerRadius]="10" [width]="100" [height]="100" fill="green"></konva-rect>
-      </konva-layer>
     </konva-layer>
-    <konva-layer >
+        <!-- <app-annotation [draggable]="true" *ngFor="let x of stuff">
+        </app-annotation> -->
+<!-- 
+    <konva-layer [draggable]="true">
+    </konva-layer> -->
+
+    <!-- <konva-layer>
       <konva-transformer>
         <konva-group [x]="200" [y]="250" [draggable]="true">
-        <konva-rect [cornerRadius]="10" [width]="100" [height]="100" fill="red"></konva-rect>
+          <konva-rect [cornerRadius]="10" [width]="100" [height]="100" fill="red"></konva-rect>
           <konva-text [x]="5" [y]="5" fill="white" text="Test 123"></konva-text>
         </konva-group>
       </konva-transformer>
-    </konva-layer>
-
-    <app-annotation *ngFor = "let x of stuff">
-    </app-annotation>
+    </konva-layer> -->
   </konva-stage>
 </div>

@@ -20,6 +20,7 @@ export class StageComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     console.log(`We have ${this.layers.length} layers`);
     this.syncChildren();
+    this.stage.draggable(true);
     this.layers.changes.subscribe(this.syncChildren.bind(this));
     console.log(this.stage);
   }

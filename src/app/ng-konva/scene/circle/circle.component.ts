@@ -24,12 +24,7 @@ export class CircleComponent extends Shape implements OnInit {
       stroke: "black",
       strokeWidth: 4
     });
-    // this.node.draggable(this.draggable);
-    setInterval(() => {
-      const x = this.node["x"];
-      // x.apply(this.node, [x.apply(this.node) - 1]);
-      this.node.getLayer().draw();
-    }, 100);
+
     await super.init();
   }
 

@@ -32,22 +32,13 @@ export class TransformerComponent extends Entity implements OnInit {
       y: 0,
       keepRatio: false,
     });
-    this.entities.changes.subscribe(this.syncChildren.bind(this));
-    this.syncChildren();
     await super.init();
+    await this.initChildren();
   }
 
-  public syncChildren() {
-    this.entities.filter(ent => ent !== this).forEach(async ent => {
-      if (!ent.initialized) {
-        ent.stage = this.stage;
-        ent.layer = this.layer;
-        await ent.init()
-        this.layer.add(ent.node);
-        this.node.attachTo(ent.node);
-      }
-    });
-    this.layer.draw();
+  public addChild(child) {
+    this.layer.add(child.node);
+    this.node.attachTo(child.node);
   }
 
   constructor() {

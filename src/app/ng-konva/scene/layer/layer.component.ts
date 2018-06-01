@@ -19,12 +19,9 @@ import { Entity, KonvaBind } from "../entity/entity";
     { provide: Entity, useExisting: forwardRef(() => LayerComponent) }
   ]
 })
-@KonvaBind(Konva.Layer, ["beforeDraw"])
+@KonvaBind(Konva.Layer, ["beforeDraw", "draw"])
 export class LayerComponent extends Entity implements OnInit {
   initialized = false;
-
-  @ContentChildren(Entity) entities: QueryList<Entity>;
-  @ViewChildren(Entity) viewEntities: QueryList<Entity>;
   
   constructor() {
     super();
@@ -41,33 +38,15 @@ export class LayerComponent extends Entity implements OnInit {
 
   public async init() {
     this.node = new Konva.Layer();
-    this.entities.changes.subscribe(() => this.syncChildren(this.entities));
-    this.entities.changes.subscribe(() => this.syncChildren(this.viewEntities));
-    this.syncChildren(this.entities);
-    this.syncChildren(this.viewEntities);
+
     // this.layer.on('beforeDraw', function() {
     //   console.log("Before draw");
     // });
     await super.init();
+    await this.initChildren();
   }
 
   addChild(child) {
     this.node.add(child.node);
-    this.node.draw();    
   }
-
-  public syncChildren(entities) {
-    entities.forEach(async ent => {
-      if (!ent.initialized && ent !== this) {
-        ent.stage = this.stage;
-        if (!(ent instanceof LayerComponent)) {
-          ent.layer = this.node;
-        }
-        await ent.init()
-        this.addChild(ent);
-      }
-    });
-  }
-
-  public async initChildren() {}
 }

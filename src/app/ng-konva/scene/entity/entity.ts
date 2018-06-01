@@ -1,5 +1,5 @@
 import * as Konva from "konva";
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ContentChildren, ViewChildren, QueryList } from "@angular/core";
 const inputDecorator = Input();
 const outputDecorator = Output();
 
@@ -134,6 +134,10 @@ export class Entity {
   public initialized = false;
   private _node: Konva.Node;
 
+  public parent: Entity;
+
+  public static readonly COMPONENT_KEY = "__ng-konva-component";
+
   _debugVisible = false;
   public get _visible() {
     return this.get("opacity") > 0;
@@ -189,20 +193,63 @@ export class Entity {
     });
   }
 
-  get(key) {
-    return this[key];
-  }
 
+  get<T=any>(key) {
+    return this[key] as T;
+  }
   set(key, val) {
     return this[key] = val;
   }
+
+
+  @ContentChildren(Entity) entities: QueryList<Entity>;
+  @ViewChildren(Entity) viewEntities: QueryList<Entity>;
 
   @Input() stage: Konva.Stage;
   @Input() layer: Konva.Layer;
 
   constructor() {}
 
+
+  addChild(child) {
+    throw new Error("Not implemented");
+  }
+
+  public syncChildren(entities) {
+    return Promise.all(entities.map(async ent => {
+      if (!ent.initialized && ent !== this) {
+        ent.stage = this.stage;
+        ent.layer = this.layer;
+        ent.parent = this;
+        await ent.init();
+        this.addChild(ent);
+      }
+    }));
+  }
+
+
+  public findClosestOfType<T extends Entity>(type: (new () => T)) {
+    let instance = this.parent;
+    while (instance.entName !== type.name) {
+      if (instance.parent === undefined) {
+        instance = null;
+        break;
+      }
+      instance = instance.parent;
+    }
+    
+    return <T>instance;
+  }
+
+  public async initChildren() {
+    this.entities.changes.subscribe(() => this.syncChildren(this.entities));
+    this.viewEntities.changes.subscribe(() => this.syncChildren(this.viewEntities));
+    await this.syncChildren(this.entities);
+    await this.syncChildren(this.viewEntities);
+  }
+
   public async init() {
     this.initialized = true;
+    this.node.setAttr(Entity.COMPONENT_KEY, this);
   }
 }
