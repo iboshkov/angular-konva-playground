@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, forwardRef } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
+import { Entity } from "../entity/entity";
+import { KonvaAutoBind } from "../../decorators";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
@@ -11,7 +12,7 @@ const rectProps = ["cornerRadius"];
   styleUrls: ["./rect.component.css"],
   providers: [{ provide: Entity, useExisting: forwardRef(() => RectComponent) }]
 })
-@KonvaBind(Konva.Rect.prototype, [], rectProps)
+@KonvaAutoBind(Konva.Rect.prototype, [], rectProps)
 export class RectComponent extends Shape implements OnInit {
   node: Konva.Rect;
 

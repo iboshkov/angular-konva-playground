@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, forwardRef } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
+import { Entity } from "../entity/entity";
+import { KonvaAutoBind } from "../../decorators";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
@@ -13,7 +14,7 @@ const imageProps = ["points", "closed"];
     { provide: Entity, useExisting: forwardRef(() => ImageComponent) }
   ]
 })
-@KonvaBind(Konva.Image.prototype, [], imageProps)
+@KonvaAutoBind(Konva.Image.prototype, [], imageProps)
 export class ImageComponent extends Shape implements OnInit {
   node: Konva.Image;
 

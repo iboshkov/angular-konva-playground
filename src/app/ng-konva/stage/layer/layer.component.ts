@@ -9,7 +9,8 @@ import {
   ViewChildren
 } from "@angular/core";
 import * as Konva from "konva";
-import { Entity, KonvaBind } from "../entity/entity";
+import { Entity } from "../entity/entity";
+import { KonvaAutoBind } from "../../decorators";
 
 @Component({
   selector: "konva-layer",
@@ -19,10 +20,10 @@ import { Entity, KonvaBind } from "../entity/entity";
     { provide: Entity, useExisting: forwardRef(() => LayerComponent) }
   ]
 })
-@KonvaBind(Konva.Layer, ["beforeDraw", "draw"])
+@KonvaAutoBind(Konva.Layer, ["beforeDraw", "draw"])
 export class LayerComponent extends Entity implements OnInit {
   initialized = false;
-  
+
   constructor() {
     super();
   }
@@ -32,6 +33,10 @@ export class LayerComponent extends Entity implements OnInit {
   @Input() stage: Konva.Stage;
   node: Konva.Layer;
 
+  @Input() zoomAmount = 1.1;
+
+  @Input() zoomEnabled = false;
+
   public get layer() {
     return this.node;
   }
@@ -39,14 +44,45 @@ export class LayerComponent extends Entity implements OnInit {
   public async init() {
     this.node = new Konva.Layer();
 
-    // this.layer.on('beforeDraw', function() {
-    //   console.log("Before draw");
-    // });
     await super.init();
     await this.initChildren();
   }
 
   addChild(child) {
     this.node.add(child.node);
+  }
+
+  resetZoom() {
+    this.layer.scale({ x: 1, y: 1 });
+  }
+
+  onWheel(e: WheelEvent) {
+    if (!this.zoomEnabled || !(e.altKey || e.metaKey)) return;
+    console.log(`Zooming ${this.name}`);
+    e.preventDefault();
+    let oldScale = this.layer.scaleX();
+
+    let mousePointTo = {
+      x:
+        this.stage.getPointerPosition().x / oldScale -
+        this.layer.x() / oldScale,
+      y:
+        this.stage.getPointerPosition().y / oldScale - this.layer.y() / oldScale
+    };
+
+    let newScale =
+      e.deltaY > 0 ? oldScale * this.zoomAmount : oldScale / this.zoomAmount;
+    this.layer.scale({ x: newScale, y: newScale });
+
+    let newPos = {
+      x:
+        -(mousePointTo.x - this.stage.getPointerPosition().x / newScale) *
+        newScale,
+      y:
+        -(mousePointTo.y - this.stage.getPointerPosition().y / newScale) *
+        newScale
+    };
+    this.layer.position(newPos);
+    this.layer.batchDraw();
   }
 }

@@ -13,6 +13,7 @@ import { AnnotationComponent } from "./annotation/annotation.component";
 import { ImageComponent } from "./ng-konva/stage/image/image.component";
 import { StageComponent } from "./ng-konva/stage/stage/stage.component";
 import Quad from "./models/quad";
+import { LayerComponent } from "./ng-konva/stage/layer/layer.component";
 
 @Component({
   selector: "app-root",
@@ -51,12 +52,20 @@ export class AppComponent implements OnInit, AfterViewInit {
   stageInit() {
     console.log("Stage init done");
     this.imageZIndex = -10;
+    this.resetView();
+  }
+
+  resetView() {
     const stageWidth = this.stage.get("width");
     const stageHeight = this.stage.get("height");
     const imageWidth = this.image.get("width");
     const imageHeight = this.image.get("height");
-    this.stage.set("x", stageWidth / 2 - imageWidth / 2);
-    this.stage.set("y", stageHeight / 2 - imageHeight / 2);
+    const imageLayer = this.image.layer.getAttr(
+      Entity.COMPONENT_KEY
+    ) as LayerComponent;
+    imageLayer.resetZoom();
+    imageLayer.set("x", stageWidth / 2 - imageWidth / 2);
+    imageLayer.set("y", stageHeight / 2 - imageHeight / 2);
   }
 
   nodeClicked(event: EntityEvent) {

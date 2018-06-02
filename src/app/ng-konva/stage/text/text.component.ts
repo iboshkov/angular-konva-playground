@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, forwardRef } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
+import { Entity } from "../entity/entity";
+import { KonvaAutoBind } from "../../decorators";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
@@ -9,7 +10,7 @@ import { Shape } from "../shape/shape";
   styleUrls: ["./text.component.css"],
   providers: [{ provide: Entity, useExisting: forwardRef(() => TextComponent) }]
 })
-@KonvaBind(Konva.Text.prototype)
+@KonvaAutoBind(Konva.Text.prototype)
 export class TextComponent extends Shape implements OnInit {
   node: Konva.Text;
 

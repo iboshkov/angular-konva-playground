@@ -8,7 +8,8 @@ import {
   QueryList,
   ContentChildren
 } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
+import { Entity } from "../entity/entity";
+import { KonvaAutoBind } from "../../decorators";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 
@@ -22,7 +23,7 @@ const transformerProps = ["attachTo"];
     { provide: Entity, useExisting: forwardRef(() => TransformerComponent) }
   ]
 })
-@KonvaBind(Konva.Transformer.prototype, [], [])
+@KonvaAutoBind(Konva.Transformer.prototype, [], [])
 export class TransformerComponent extends Entity implements OnInit {
   node: Konva.Transformer;
   @ContentChildren(Entity) entities: QueryList<Entity>;
@@ -30,7 +31,7 @@ export class TransformerComponent extends Entity implements OnInit {
     this.node = new Konva.Transformer({
       x: 0,
       y: 0,
-      keepRatio: false,
+      keepRatio: false
     });
     await super.init();
     await this.initChildren();

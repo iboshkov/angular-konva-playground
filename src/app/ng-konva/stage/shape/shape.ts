@@ -1,5 +1,6 @@
-import { Entity, KonvaBind } from "../entity/entity";
+import { Entity } from "../entity/entity";
 import * as Konva from "konva";
+import { KonvaAutoBind } from "../../decorators";
 
-@KonvaBind(Konva.Shape.prototype, [], ["fill", "stroke", "strokeWidth"])
+@KonvaAutoBind(Konva.Shape.prototype, [], ["fill", "stroke", "strokeWidth"])
 export class Shape extends Entity {}

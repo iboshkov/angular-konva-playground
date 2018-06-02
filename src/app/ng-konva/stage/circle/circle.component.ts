@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, forwardRef } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
-import * as Konva from "konva";
+import { Entity } from "../entity/entity";
 import { Shape } from "../shape/shape";
+import * as Konva from "konva";
+import { KonvaAutoBind } from "../../decorators";
 
 @Component({
   selector: "konva-circle",
@@ -11,7 +12,7 @@ import { Shape } from "../shape/shape";
     { provide: Entity, useExisting: forwardRef(() => CircleComponent) }
   ]
 })
-@KonvaBind(Konva.Circle.prototype)
+@KonvaAutoBind(Konva.Circle.prototype)
 export class CircleComponent extends Shape implements OnInit {
   node: Konva.Circle;
 

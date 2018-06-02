@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, forwardRef } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
+import { Entity } from "../entity/entity";
 import * as Konva from "konva";
 import { Shape } from "../shape/shape";
 

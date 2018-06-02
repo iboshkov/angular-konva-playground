@@ -6,8 +6,9 @@ import {
   QueryList,
   forwardRef
 } from "@angular/core";
-import { Entity, KonvaBind, NodeBinding } from "../entity/entity";
+import { Entity } from "../entity/entity";
 import * as Konva from "konva";
+import { KonvaAutoBind } from "../../decorators";
 
 @Component({
   selector: "konva-group",
@@ -20,8 +21,8 @@ import * as Konva from "konva";
     }
   ]
 })
-@KonvaBind(Konva.Group.prototype)
-export class GroupComponent extends Entity implements OnInit {
+@KonvaAutoBind(Konva.Group.prototype)
+export class GroupComponent extends Entity {
   node: Konva.Group;
 
   public async init() {
@@ -36,11 +37,4 @@ export class GroupComponent extends Entity implements OnInit {
   public addChild(child) {
     this.node.add(child.node);
   }
-
-
-  constructor() {
-    super();
-  }
-
-  ngOnInit() {}
 }

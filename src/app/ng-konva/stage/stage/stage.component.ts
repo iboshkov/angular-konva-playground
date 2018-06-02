@@ -13,15 +13,16 @@ import {
 } from "@angular/core";
 import * as Konva from "konva";
 import { EntityComponent } from "../entity/entity.component";
-import { Entity, KonvaBind } from "../entity/entity";
+import { Entity } from "../entity/entity";
 import { LayerComponent } from "../layer/layer.component";
+import { KonvaAutoBind } from "../../decorators";
 
 @Component({
   selector: "konva-stage",
   templateUrl: "./stage.component.html",
   styleUrls: ["./stage.component.css"]
 })
-@KonvaBind(Konva.Stage.prototype)
+@KonvaAutoBind(Konva.Stage.prototype)
 export class StageComponent extends Entity implements OnInit, AfterViewInit {
   constructor() {
     super();
@@ -43,7 +44,7 @@ export class StageComponent extends Entity implements OnInit, AfterViewInit {
       height: 1024
     });
 
-    this.stage.draggable(true);
+    // this.stage.draggable(true);
 
     await this.init();
     await this.initChildren();
@@ -72,6 +73,10 @@ export class StageComponent extends Entity implements OnInit, AfterViewInit {
   }
 
   onWheel(e: WheelEvent) {
+    this.entities
+      .filter(ent => ent.entName === LayerComponent.name)
+      .forEach(layer => layer.onWheel(e));
+
     if (!this.zoomEnabled || !(e.altKey || e.metaKey)) return;
     e.preventDefault();
     let oldScale = this.stage.scaleX();

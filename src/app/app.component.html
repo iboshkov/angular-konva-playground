@@ -4,20 +4,32 @@
     <div class="field is-horizontal">
       <div class="field-body">
         <div class="control">
-          <button class="button is-primary" (click)="addAnnotation()">Add Stuff</button>
+          <button class="button is-primary" (click)="addAnnotation()">Add Annotation</button>
         </div>
       </div>
     </div>
   </div>
 
-  <konva-stage [height]="1000" [debugEnabled]="true" [zoomEnabled]="true" (postInit)="stageInit($event)">
-    <konva-layer>
+  <konva-stage [height]="1000" [debugEnabled]="true" (postInit)="stageInit($event)">
+    <konva-layer name="Image Layer" [draggable]="true" [zoomEnabled]="true">
       <konva-image (postInit)="imagePostInit($event)" [zIndex]="imageZIndex" imageSrc="https://images.unsplash.com/photo-1489008777659-ad1fc8e07097?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e834115d1303a6a9b7d31e24b451a131&auto=format&fit=crop&w=1950&q=80">
       </konva-image>
       <app-annotation (postInit)="annotationPostInit($event)" [x]="100" [y]="100" [color]="color(idx)" (click)="nodeClicked($event)"
         (dblclick)="annotationDoubleClicked($event)" [draggable]="true" *ngFor="let x of annotationTracker; let idx = index">
       </app-annotation>
     </konva-layer>
+
+    <konva-layer [draggable]="false">
+      <konva-group (click)="addAnnotation()" [x]="12" [y]="12">
+        <konva-rect [cornerRadius]="5" [width]="50" [height]="50"></konva-rect>
+        <konva-text text="+" fill="white" align="center" [fontSize]="50" [width]="50" [height]="50"></konva-text>
+      </konva-group>
+      <konva-group (click)="resetView()" [x]="12" [y]="72">
+        <konva-rect [cornerRadius]="5" [width]="50" [height]="50"></konva-rect>
+        <konva-text [y]="12" text="Reset View" fill="white" [fontSize]="12" align="center" [width]="50" [height]="50"></konva-text>
+      </konva-group>
+    </konva-layer>
+
   </konva-stage>
   <div *ngFor="let x of annotations; let i = index">
     <strong>[{{i}}] [{{color(i)}}] {{x.note}}</strong> {{x.quad}}

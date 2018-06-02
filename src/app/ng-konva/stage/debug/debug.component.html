@@ -2,6 +2,7 @@
   <header class="card-header">
     <p class="card-header-title">
       <strong style="padding: 10px; cursor: pointer;" (click)="component.toggleDebug()">Debug [{{component.entName}}]</strong>
+      <span *ngIf="component.name">{{component.name}}</span>
     </p>
 
     <label class="card-header-icon checkbox">
